@@ -1,0 +1,85 @@
+## Task 175
+```
+SELECT 
+    p.firstName,
+    p.lastName,
+    a.city,
+    a.state
+FROM 
+    Person p
+LEFT JOIN 
+    Address a ON p.personId = a.personId;
+```
+![image](https://github.com/VikaBogomolova/vvvvvvvvvvvvvvv/assets/112609467/c89ada15-3b73-4128-a5fa-0c9159c18a30)
+
+
+## Task 176
+```
+WITH RankedSalaries AS (
+    SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS SalaryRank
+    FROM Employee
+)
+SELECT 
+    CASE 
+        WHEN (SELECT COUNT(DISTINCT SalaryRank) FROM RankedSalaries) < 2 THEN NULL
+        ELSE (SELECT salary FROM RankedSalaries WHERE SalaryRank = 2)
+    END AS SecondHighestSalary;
+
+
+```
+![image](https://github.com/VikaBogomolova/vvvvvvvvvvvvvvv/assets/112609467/49a75162-1993-4b23-9e2e-e3683e6642e0)
+
+
+## Task 177
+```
+CREATE OR REPLACE FUNCTION NthHighestSalary(N INT) RETURNS TABLE (Salary INT) AS $$ 
+BEGIN 
+  RETURN QUERY ( 
+    SELECT Employee.salary  
+    FROM Employee  
+    ORDER BY Employee.salary DESC  
+    LIMIT 1 OFFSET N-1 
+  ); 
+END; 
+$$ LANGUAGE plpgsql;
+```
+![image](https://github.com/VikaBogomolova/vvvvvvvvvvvvvvv/assets/112609467/e5d3bbf3-9322-4f34-b8bd-58525d64841a)
+![image](https://github.com/VikaBogomolova/vvvvvvvvvvvvvvv/assets/112609467/6381b74c-b914-4b44-9a94-fb7e0c5266fe)
+
+## Task 178
+```
+
+SELECT score, 
+       DENSE_RANK() OVER (ORDER BY score DESC) AS rank
+FROM Scores
+ORDER BY score DESC;
+```
+![image](https://github.com/VikaBogomolova/vvvvvvvvvvvvvvv/assets/112609467/2ed24361-4224-456e-a98b-f53479cfed84)
+
+
+## Task 181
+```
+
+SELECT e1.name AS Employee
+FROM Employee e1
+JOIN Employee e2 ON e1.managerId = e2.id
+WHERE e1.salary > e2.salary;
+```
+![image](https://github.com/VikaBogomolova/vvvvvvvvvvvvvvv/assets/112609467/5161d3f0-a3db-4989-b06e-922f98c49409)
+
+## Task 182
+
+```
+WITH Duplicates AS (
+    SELECT email
+    FROM Person
+    GROUP BY email
+    HAVING COUNT(*) > 1
+)
+SELECT email AS Email
+FROM Duplicates;
+```
+![image](https://github.com/VikaBogomolova/vvvvvvvvvvvvvvv/assets/112609467/d37141e8-127e-4ba9-912b-2d38c017cda3)
+
+
+
